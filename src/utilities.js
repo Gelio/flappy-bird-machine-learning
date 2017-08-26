@@ -53,11 +53,14 @@ const isGameOver = () => !!window.dead;
 
 const shouldBirdJump = result => result === 1;
 
+const getScore = () => window.counter.text;
+
 module.exports = {
   getBirdPosition,
   getBirdCenter,
   getBirdSize,
   getNextGap,
   isGameOver,
-  shouldBirdJump
+  shouldBirdJump,
+  getScore
 };

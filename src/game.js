@@ -4,7 +4,8 @@ const {
   getBirdPosition,
   getNextGap,
   isGameOver,
-  shouldBirdJump
+  shouldBirdJump,
+  getScore
 } = require('./utilities');
 
 function getGameState() {
@@ -22,6 +23,7 @@ function mapStateToInputs(state) {
 
 let iteration = 1;
 let justRestarted = true;
+let lastScore = getScore();
 function ticker() {
   if (isGameOver()) {
     console.log('Restarting. Iteration', ++iteration);
@@ -34,8 +36,15 @@ function ticker() {
   if (justRestarted) {
     justRestarted = false;
   } else {
-    agent.learn(config.EXPERIENCE_ON_SUCCESS_TICK);
+    const currentScore = getScore();
+    if (currentScore > lastScore) {
+      agent.learn(config.EXPERIENCE_ON_SUCCESS);
+      lastScore = currentScore;
+    } else if (getBirdPosition().y <= 0) {
+      agent.learn(config.EXPERIENCE_ON_FAILURE);
+    }
   }
+
 
   const gameState = getGameState();
   const inputs = mapStateToInputs(gameState);

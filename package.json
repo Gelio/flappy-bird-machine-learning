@@ -1,0 +1,17 @@
+{
+  "name": "flappy-bird-ai",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Grzegorz Rozdzialik <voreny.gelio@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^0.10.1",
+    "synaptic": "^1.0.12",
+    "webpack": "^3.5.5"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "watch": "webpack -w",
+    "build": "webpack"
+  }
+}

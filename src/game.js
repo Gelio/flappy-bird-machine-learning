@@ -1,92 +1,55 @@
 const network = require('./network');
 const config = require('./config');
-
-const gapGoalHeight = gap * 0.8;
-
-function isGameOver() {
-  return !!dead;
-}
-
-function getBirdX() {
-  return bird.x + bird.spriteSheet._frameWidth / 2;
-}
-
-function getBirdY() {
-  return bird.y + bird.spriteSheet._frameHeight / 2;
-}
-
-function getPipeEndX(pipe) {
-  return pipe.x + pipe.image.width;
-}
-
-function findNearestPipe() {
-  const pipes = window.pipes.children;
-
-  if (pipes.length === 0) {
-    return { x: getBirdX(), y: ground.y / 2 };
-  }
-
-  return pipes.reduce((nearest, next) => {
-    if (
-      getPipeEndX(next) > bird.x &&
-      next.x <= nearest.x &&
-      next.y < nearest.y
-    ) {
-      return next;
-    }
-
-    return nearest;
-  });
-}
+const {
+  getBirdCenter,
+  getBirdPosition,
+  getBirdSize,
+  getNextGap,
+  isGameOver,
+  shouldBirdJump
+} = require('./utilities');
 
 function getGameState() {
-  const nearestPipe = findNearestPipe();
-  const deltaX = nearestPipe.x - getBirdX();
-  const deltaH = nearestPipe.y + gapGoalHeight - getBirdY();
-
+  const birdPosition = getBirdPosition();
+  const nextGap = getNextGap(birdPosition.x);
   return {
-    deltaX,
-    deltaH,
-    birdY: getBirdY()
+    deltaX: nextGap.x - birdPosition.x,
+    deltaY: nextGap.y + nextGap.height - birdPosition.y
   };
 }
 
 function mapStateToInputs(state) {
-  return [state.deltaX, state.birdY, state.deltaH];
+  return [state.deltaX, state.deltaY];
 }
 
-function shouldBirdJump(networkOutput) {
-  return networkOutput >= config.JUMP_THRESHOLD;
-}
-
-let lastHeightDelta = null;
 let iteration = 1;
+let lastDeltaY = null;
 function ticker() {
   if (isGameOver()) {
     console.log('Restarting. Iteration', ++iteration);
-    const errorPropagateValue = lastHeightDelta > 0 ? 0 : 1;
+    const errorPropagateValue = lastDeltaY > 0 ? 0 : 1;
     network.propagate(config.ERROR_LEARNING_RATE, [errorPropagateValue]);
-    restart();
-    return handleJumpStart();
+    window.restart();
+    return window.handleJumpStart();
   }
 
   const gameState = getGameState();
 
-  const tickPropagateValue = gameState.deltaH > 0 ? 0 : 1;
+  const tickPropagateValue = gameState.deltaY > 0 ? 0 : 1;
   network.propagate(config.TICK_LEARNING_RATE / 10, [tickPropagateValue]);
-  lastHeightDelta = gameState.deltaH;
+  lastDeltaY = gameState.deltaY;
 
   const inputs = mapStateToInputs(gameState);
 
   const output = network.activate(inputs)[0];
   if (shouldBirdJump(output)) {
-    handleJumpStart();
+    window.handleJumpStart();
   }
 }
 
 function start() {
   console.log('Starting. Iteration', iteration);
-  handleJumpStart();
+  window.handleJumpStart();
 
   setInterval(Game.ticker, config.TICK_INTERVAL);
 }

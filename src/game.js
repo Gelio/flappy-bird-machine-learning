@@ -1,9 +1,7 @@
-const network = require('./network');
+const agent = require('./agent');
 const config = require('./config');
 const {
-  getBirdCenter,
   getBirdPosition,
-  getBirdSize,
   getNextGap,
   isGameOver,
   shouldBirdJump
@@ -23,25 +21,25 @@ function mapStateToInputs(state) {
 }
 
 let iteration = 1;
-let lastDeltaY = null;
+let justRestarted = true;
 function ticker() {
   if (isGameOver()) {
     console.log('Restarting. Iteration', ++iteration);
-    const errorPropagateValue = lastDeltaY > 0 ? 0 : 1;
-    network.propagate(config.ERROR_LEARNING_RATE, [errorPropagateValue]);
+    agent.learn(config.EXPERIENCE_ON_FAILURE);
+    justRestarted = true;
     window.restart();
     return window.handleJumpStart();
   }
 
+  if (justRestarted) {
+    justRestarted = false;
+  } else {
+    agent.learn(config.EXPERIENCE_ON_SUCCESS_TICK);
+  }
+
   const gameState = getGameState();
-
-  const tickPropagateValue = gameState.deltaY > 0 ? 0 : 1;
-  network.propagate(config.TICK_LEARNING_RATE / 10, [tickPropagateValue]);
-  lastDeltaY = gameState.deltaY;
-
   const inputs = mapStateToInputs(gameState);
-
-  const output = network.activate(inputs)[0];
+  const output = agent.act(inputs);
   if (shouldBirdJump(output)) {
     window.handleJumpStart();
   }

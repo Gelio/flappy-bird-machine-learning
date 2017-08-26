@@ -1,5 +1,4 @@
 const puppeteer = require('puppeteer');
-const { TICK_INTERVAL } = require('./src/config');
 
 (async () => {
   const browser = await puppeteer.launch({

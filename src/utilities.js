@@ -26,8 +26,8 @@ function getNextGap(startX) {
   if (pipes.length === 0) {
     const birdPosition = getBirdPosition();
     return {
-      x: birdPosition.x + 100,
-      y: ground.y / 2,
+      x: birdPosition.x + config.X_OFFSET_WHEN_NO_PIPES,
+      y: config.GAME_HEIGHT / 2,
       width: config.PIPE_WIDTH,
       height: config.GAP_HEIGHT
     };
@@ -51,7 +51,7 @@ function getNextGap(startX) {
 
 const isGameOver = () => !!window.dead;
 
-const shouldBirdJump = result => result >= config.JUMP_THRESHOLD;
+const shouldBirdJump = result => result === 1;
 
 module.exports = {
   getBirdPosition,

@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "puppeteer": "^0.10.1",
-    "synaptic": "^1.0.12",
+    "reinforcenode": "^1.0.1",
     "webpack": "^3.5.5"
   },
   "scripts": {

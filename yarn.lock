@@ -1604,6 +1604,10 @@ regex-cache@^0.4.2:
     is-equal-shallow "^0.1.3"
     is-primitive "^2.0.0"
 
+reinforcenode@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/reinforcenode/-/reinforcenode-1.0.1.tgz#25bdc56a0d71d21e8e358ac28e5f931f72e77ba6"
+
 remove-trailing-separator@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz#c24bce2a283adad5bc3f58e0d48249b92379d8ef"
@@ -1827,10 +1831,6 @@ supports-color@^4.2.1:
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-4.2.1.tgz#65a4bb2631e90e02420dba5554c375a4754bb836"
   dependencies:
     has-flag "^2.0.0"
-
-synaptic@^1.0.12:
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/synaptic/-/synaptic-1.0.12.tgz#65338a39bd70a48c92d4f7823e45fae043f8765d"
 
 tapable@^0.2.7:
   version "0.2.8"

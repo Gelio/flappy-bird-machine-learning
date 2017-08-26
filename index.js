@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const { TICK_INTERVAL } = require('./src/config');
 
-
 (async () => {
   const browser = await puppeteer.launch({
     headless: false,
@@ -12,7 +11,7 @@ const { TICK_INTERVAL } = require('./src/config');
     ]
   });
   const page = await browser.newPage();
-  await page.goto('http://flappybird.io/', {waitUntil: 'networkidle'});
+  await page.goto('http://flappybird.io/', { waitUntil: 'networkidle' });
 
   await page.injectFile('./dist/bundle.js');
   await page.evaluate(() => Game.start());

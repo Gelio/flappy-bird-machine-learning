@@ -27,7 +27,11 @@ function findNearestPipe() {
   }
 
   return pipes.reduce((nearest, next) => {
-    if (getPipeEndX(next) > bird.x && next.x <= nearest.x && next.y < nearest.y) {
+    if (
+      getPipeEndX(next) > bird.x &&
+      next.x <= nearest.x &&
+      next.y < nearest.y
+    ) {
       return next;
     }
 
